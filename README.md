@@ -1,17 +1,48 @@
 # Simple Todo App
+# ✅ ToDo App - Task Tracker
 
-Give a brief description of the project here. Feel free to give it a different name.
+A simple and effective ToDo App built with **vanilla JavaScript**. This project demonstrates the use of **functions**, **object-oriented programming (OOP)**, and **form validation** to manage tasks in a user-friendly interface.
 
-## Functionality
+## 📌 Features
 
-Give a more detailed explanation of the project and its functionality.
+- Add, complete, and delete tasks
+- Input validation with custom error messages
+- Clean and responsive UI
 
-## Technology
+## 🧰 Technologies Used
 
-Give a description of the technologies and techniques used. Pictures, GIFs, or screenshots that detail the project features are recommended.
+- HTML5
+- CSS3
+- JavaScript (ES6+)
 
-## Deployment
+Modular and reusable functions help handle:
 
-This project is deployed on GitHub Pages:
+- Form input validation
+- DOM element creation
 
-- ADD LINK HERE
+### 🧱 Object-Oriented Programming
+
+The app structure is centered around a `TodoApp` class and a `FormValidator` class:
+class FormValidator {
+  constructor(form) {
+    this.form = form;
+    this.fields = form.querySelectorAll("input");
+  }
+
+  validate() {
+    this._inputList((inputElement) => {
+      // Individual field validations
+    });
+  }
+
+  showError(input, message) {
+    // Displays error messages
+  }
+
+  hideError(input) {
+    // Hides input error message
+  }
+}
+
+
+Link to my ToDoApp: https://apachaitime.github.io/se_project_todo-app/
