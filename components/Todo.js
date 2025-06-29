@@ -1,8 +1,11 @@
 class ToDo {
-  constructor(data, selector) {
+  constructor(data, selector, counterElement, initialTodos) {
     this._data = data;
     this._templateElement = document.querySelector(selector);
+    this._counterElement = counterElement;
+    this._initialTodos = initialTodos;
   }
+
   generateDate() {
     const dueDate = new Date(this._data.date);
     if (!isNaN(dueDate)) {
@@ -17,12 +20,16 @@ class ToDo {
   _setEventListeners() {
     this._todoDeleteBtn.addEventListener("click", () => {
       this._todoElement.remove();
+      if (typeof this._initialTodos === `function`) {
+        this._initialTodos();
+      }
     });
 
-    // Working on this eventlistener for CheckBox 6/22
     this._todoCheckboxEl.addEventListener("change", () => {
       this._data.completed = !this._data.completed;
-      console.log(this._data.completed);
+      if (typeof this._counterElement === `function`) {
+        this._counterElement(this._data.completed);
+      }
     });
   }
 

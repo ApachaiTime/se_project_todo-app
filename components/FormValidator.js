@@ -9,11 +9,12 @@ class FormValidator {
     this._inactiveButtonClass = settings.inactiveButtonClass;
   }
 
-  resetFormValidation() {
-    this._inputList.forEach((inputElement) => {
-      this._formElement.reset();
-      this._toggleButtonState();
+  resetValidation() {
+    this._inputList.forEach((item) => {
+      this._hideInputError;
     });
+    this._formElement.reset();
+    this._toggleButtonState();
   }
 
   _showInputError(inputElement) {

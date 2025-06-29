@@ -1,12 +1,13 @@
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import { initialTodos, validationConfig } from "../utils/constants.js";
 import FormValidator from "../components/FormValidator.js";
-
+import ToDo from "../components/Todo.js";
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
 const addTodoForm = addTodoPopup.querySelector(".popup__form");
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
+const counter = document.querySelector(".counter__text");
 
 const openModal = (modal) => {
   modal.classList.add("popup_visible");
@@ -16,11 +17,18 @@ const closeModal = (modal) => {
   modal.classList.remove("popup_visible");
 };
 
-import ToDo from "../components/Todo.js";
+let count = 0;
+const counterElement = (completed) => {
+  if (completed) {
+    count++;
+  } else {
+    count--;
+  }
+  counter.textContent = `Showing ${count} out of ${initialTodos.length} completed`;
+};
 
-// The logic in this function should all be handled in the Todo class.
 const generateTodo = (data) => {
-  const todo = new ToDo(data, "#todo-template");
+  const todo = new ToDo(data, "#todo-template", counterElement);
   const todoElement = todo.getView();
   return todoElement;
 };
@@ -37,8 +45,6 @@ addTodoForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
   const name = evt.target.name.value;
   const dateInput = evt.target.date.value;
-
-  // Create a date object and adjust for timezone
   const date = new Date(dateInput);
   date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
@@ -47,10 +53,16 @@ addTodoForm.addEventListener("submit", (evt) => {
   const todo = generateTodo(values);
   todosList.append(todo);
   closeModal(addTodoPopup);
-  todoValidator.resetFormValidation();
+  initialTodos.push(todo);
+  counter.textContent = `Showing ${count} out of ${initialTodos.length} completed`;
+  todoValidator.resetValidation();
 });
 
 initialTodos.forEach((item) => {
+  counter.textContent = `Showing ${count} out of ${initialTodos.length} completed`;
+  if (item.completed) {
+    count++;
+  }
   const todo = generateTodo(item);
   todosList.append(todo);
 });
