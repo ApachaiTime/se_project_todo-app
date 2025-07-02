@@ -1,3 +1,5 @@
+import { initialTodos } from "../utils/constants.js";
+
 class ToDo {
   constructor(data, selector, counterElement, initialTodos) {
     this._data = data;
@@ -20,9 +22,6 @@ class ToDo {
   _setEventListeners() {
     this._todoDeleteBtn.addEventListener("click", () => {
       this._todoElement.remove();
-      if (typeof this._initialTodos === `function`) {
-        this._initialTodos();
-      }
     });
 
     this._todoCheckboxEl.addEventListener("change", () => {
