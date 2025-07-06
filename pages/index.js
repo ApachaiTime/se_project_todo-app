@@ -4,7 +4,7 @@ import FormValidator from "../components/FormValidator.js";
 import ToDo from "../components/Todo.js";
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
-const addTodoForm = addTodoPopup.querySelector(".popup__form");
+const addTodoForm = document.forms["add-todo-form"];
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
 const counter = document.querySelector(".counter__text");
@@ -28,6 +28,11 @@ const generateTodo = (data) => {
   const todo = new ToDo(data, "#todo-template", counterElement, initialTodos);
   const todoElement = todo.getView();
   return todoElement;
+};
+
+const renderTodo = (item) => {
+  const todo = generateTodo(item);
+  todosList.append(todo);
 };
 
 const counterElement = (completed) => {
@@ -61,7 +66,6 @@ addTodoForm.addEventListener("submit", (evt) => {
   closeModal(addTodoPopup);
   initialTodos.push(todo);
   counter.textContent = `Showing ${count} out of ${initialTodos.length} completed`;
-  todoValidator.resetValidation();
 });
 
 initialTodos.forEach((item) => {
@@ -69,10 +73,8 @@ initialTodos.forEach((item) => {
   if (item.completed) {
     count++;
   }
-  const todo = generateTodo(item);
-  todosList.append(todo);
+  renderTodo(item);
 });
-console.log();
 
 const todoValidator = new FormValidator(addTodoForm, validationConfig);
 

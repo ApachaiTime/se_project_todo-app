@@ -8,7 +8,7 @@ class ToDo {
     this._initialTodos = initialTodos;
   }
 
-  generateDate() {
+  _generateDate() {
     const dueDate = new Date(this._data.date);
     if (!isNaN(dueDate)) {
       this._todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
@@ -22,6 +22,7 @@ class ToDo {
   _setEventListeners() {
     this._todoDeleteBtn.addEventListener("click", () => {
       this._todoElement.remove();
+      this._todoElement = null;
     });
 
     this._todoCheckboxEl.addEventListener("change", () => {
@@ -47,7 +48,7 @@ class ToDo {
     this._todoCheckboxEl.id = `todo-${this._data.id}`;
     this._todoLabel.setAttribute("for", `todo-${this._data.id}`);
     this._setEventListeners();
-    this.generateDate();
+    this._generateDate();
     return this._todoElement;
   }
 }
