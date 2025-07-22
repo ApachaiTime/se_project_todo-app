@@ -1,4 +1,7 @@
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import Popup from "../components/Popup.js";
+import TodoCounter from "../components/TodoCounter.js";
+import PopupWithForm from "../components/PopupWithForm.js";
 import { initialTodos, validationConfig } from "../utils/constants.js";
 import FormValidator from "../components/FormValidator.js";
 import ToDo from "../components/Todo.js";
@@ -7,25 +10,48 @@ const addTodoPopup = document.querySelector("#add-todo-popup");
 const addTodoForm = document.forms["add-todo-form"];
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
-const counter = document.querySelector(".counter__text");
-const openModal = (modal) => {
-  modal.classList.add("popup_visible");
-};
 
-const closeModal = (modal) => {
-  modal.classList.remove("popup_visible");
-};
+const todoCounter = new TodoCounter(initialTodos, ".counter__text");
+const popup = new Popup({ PopupSelector: addTodoPopup });
+const formPopup = new PopupWithForm({
+  PopupSelector: addTodoPopup,
+  handleSubmit: (evt, increment) => {
+    const id = uuidv4();
+    const data = formPopup._getInputValues();
+    const todo = generateTodo(data);
+    todosList.append(todo);
+    popup.close();
+    todoCounter.updateTotal(!increment);
+  },
+});
+formPopup.setEventListeners();
+addTodoButton.addEventListener("click", () => {
+  popup.open();
+});
 
-let count = 0;
+function handleTotal() {
+  todoCounter.updateTotal();
+}
 
-// Can not figure out how to implement the counter to work with total Todos. I can't get my objects to remove from the array and display the count
-let currentTodos = initialTodos.filter((item, data) => item.id !== data.id);
-if (typeof initialTodos === `object`) {
-  initialTodos;
+function handleDelete(completed) {
+  if (completed) {
+    todoCounter.updateCompleted(false);
+  }
+}
+
+function handleCheck(completed) {
+  todoCounter.updateCompleted(completed);
 }
 
 const generateTodo = (data) => {
-  const todo = new ToDo(data, "#todo-template", counterElement, initialTodos);
+  const todo = new ToDo(
+    data,
+    "#todo-template",
+    initialTodos,
+    handleCheck,
+    handleDelete,
+    handleTotal
+  );
   const todoElement = todo.getView();
   return todoElement;
 };
@@ -35,44 +61,7 @@ const renderTodo = (item) => {
   todosList.append(todo);
 };
 
-const counterElement = (completed) => {
-  if (completed) {
-    count++;
-  } else {
-    count--;
-  }
-  counter.textContent = `Showing ${count} out of ${currentTodos.length} completed`;
-};
-
-addTodoButton.addEventListener("click", () => {
-  openModal(addTodoPopup);
-});
-
-addTodoCloseBtn.addEventListener("click", () => {
-  closeModal(addTodoPopup);
-});
-
-addTodoForm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  const name = evt.target.name.value;
-  const dateInput = evt.target.date.value;
-  const date = new Date(dateInput);
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
-  const id = uuidv4();
-  const values = { name, date, id };
-  const todo = generateTodo(values);
-  todosList.append(todo);
-  closeModal(addTodoPopup);
-  initialTodos.push(todo);
-  counter.textContent = `Showing ${count} out of ${initialTodos.length} completed`;
-});
-
 initialTodos.forEach((item) => {
-  counter.textContent = `Showing ${count} out of ${initialTodos.length} completed`;
-  if (item.completed) {
-    count++;
-  }
   renderTodo(item);
 });
 
