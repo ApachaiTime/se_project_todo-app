@@ -1,17 +1,20 @@
-class Section {
-  constructor({ items = [], renderer, containerSelector }) {
+import { initialTodos } from "../utils/constants.js";
+
+export default class Section {
+  constructor({ items, renderTodo, containerSelector }) {
     this._items = items;
-    this._renderer = renderer;
+    this._renderTodo = renderTodo;
     this._containerSelector = document.querySelector(".todos__list");
   }
 
   renderItems() {
-    items.array.forEach((element) => {
-      this._renderer();
+    this._items = initialTodos;
+    this._items.forEach((item) => {
+      this._renderTodo(item);
     });
   }
 
-  addItem(element) {
-    this._containerSelector.append(element);
+  addItem(item) {
+    this._containerSelector.append(item);
   }
 }
