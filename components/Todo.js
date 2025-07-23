@@ -1,6 +1,6 @@
 import { initialTodos } from "../utils/constants.js";
 
-class ToDo {
+class Todo {
   constructor(
     data,
     selector,
@@ -62,4 +62,4 @@ class ToDo {
     return this._todoElement;
   }
 }
-export default ToDo;
+export default Todo;

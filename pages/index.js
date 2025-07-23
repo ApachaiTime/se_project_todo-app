@@ -5,18 +5,18 @@ import TodoCounter from "../components/TodoCounter.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import { initialTodos, validationConfig } from "../utils/constants.js";
 import FormValidator from "../components/FormValidator.js";
-import ToDo from "../components/Todo.js";
+import Todo from "../components/Todo.js";
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
 const addTodoForm = document.forms["add-todo-form"];
 const todosList = document.querySelector(".todos__list");
 const todoCounter = new TodoCounter(initialTodos, ".counter__text");
-const popup = new Popup({ PopupSelector: addTodoPopup });
+const popup = new Popup({ popupSelector: addTodoPopup });
 const formPopup = new PopupWithForm({
-  PopupSelector: addTodoPopup,
+  popupSelector: addTodoPopup,
   handleSubmit: (evt, increment) => {
     const id = uuidv4();
-    const data = formPopup._getInputValues(id);
+    const data = formPopup.getInputValues(id);
     const todo = generateTodo(data);
     section.addItem(todo);
     popup.close();
@@ -43,7 +43,7 @@ function handleCheck(completed) {
 }
 
 const generateTodo = (data) => {
-  const todo = new ToDo(
+  const todo = new Todo(
     data,
     "#todo-template",
     initialTodos,
@@ -57,11 +57,14 @@ const generateTodo = (data) => {
 
 const renderTodo = (item) => {
   const todo = generateTodo(item);
-  todosList.append(todo);
+  section.addItem(todo);
 };
 
-popup._handleEscapeClose();
-const section = new Section({ initialTodos, renderTodo, todosList });
+const section = new Section({
+  initialTodos,
+  renderTodo,
+  containerSelector: todosList,
+});
 section.renderItems();
 
 const todoValidator = new FormValidator(addTodoForm, validationConfig);
