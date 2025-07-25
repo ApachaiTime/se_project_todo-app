@@ -8,7 +8,7 @@ export default class PopupWithForm extends Popup {
   }
   getInputValues() {
     this._inputList = this._formEl.querySelectorAll(".popup__input");
-    let values = {};
+    const values = {};
     this._inputList.forEach((input) => {
       values[input.name] = input.value;
     });
@@ -20,7 +20,7 @@ export default class PopupWithForm extends Popup {
 
     this._formEl.addEventListener("submit", (evt) => {
       evt.preventDefault();
-      let values = this.getInputValues();
+      const values = this.getInputValues();
       this._handleSubmit(values);
     });
   }
